@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/gitsage-banner.png" alt="GitSage" width="640"/>
+<img src="assets/gitsage-banner.jpg" alt="GitSage" width="640"/>
 
 # GitSage
 
@@ -17,7 +17,7 @@
 
 ## What is GitSage?
 
-GitSage is a locally-hosted web UI for Git, built on FastAPI and HTMX. It gives you a clean browser-based dashboard for your daily Git workflow — staging files, committing, branching, and syncing with remotes — without memorising terminal commands.
+GitSage is a locally-hosted web UI for Git, built on FastAPI and HTMX. It gives you a clean browser-based dashboard for your daily Git workflow, staging files, committing, branching, and syncing with remotes, without memorising terminal commands.
 
 The standout feature is its deep integration with **Google Gemini AI**:
 
@@ -39,7 +39,7 @@ Everything runs on your machine. No data leaves your environment except the call
 | AI | Diagnose Git errors with step-by-step remediation |
 | Branches | List, create, switch, and delete local branches |
 | Remotes | Fetch, pull, and push to configured remotes |
-| Security | All subprocess calls use list arguments — no shell injection surface |
+| Security | All subprocess calls use list arguments, no shell injection surface |
 
 ---
 

@@ -1,0 +1,22 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="magicGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" /> <stop offset="100%" style="stop-color:#a855f7;stop-opacity:1" /> </linearGradient>
+  </defs>
+
+  <rect width="64" height="64" rx="14" fill="#0f172a" />
+
+  <path d="M16 20 L30 32 L16 44" 
+        stroke="url(#magicGradient)" 
+        stroke-width="6" 
+        fill="none" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+
+  <path d="M46 22 
+           C 46 22, 48 30, 56 32 
+           C 48 34, 46 42, 46 42 
+           C 46 42, 44 34, 36 32 
+           C 44 30, 46 22, 46 22 Z" 
+        fill="url(#magicGradient)"/>
+</svg>
