@@ -2,7 +2,8 @@
 
 from typing import Optional
 
-from fastapi import APIRouter, Query
+from fastapi import APIRouter
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel, field_validator
 
 from app.services.ai_service import diagnose_error, generate_commit_message
@@ -25,19 +26,25 @@ class DiagnoseRequest(BaseModel):
     def validate_error(cls, v: str) -> str:
         if not v.strip():
             raise ValueError("Error output cannot be empty.")
-        return v[:3000]  # Cap on input side too
+        return v[:3000]
 
 
 @router.post("/commit-message")
 async def ai_commit_message(req: GenerateMessageRequest):
     """Generate a commit message from the current staged diff."""
-    diff = get_staged_diff(req.repo_path)
-    message = await generate_commit_message(diff)
-    return {"message": message}
+    try:
+        diff = get_staged_diff(req.repo_path)
+        message = await generate_commit_message(diff)
+        return {"message": message}
+    except ValueError as exc:
+        return JSONResponse(status_code=400, content={"detail": str(exc)})
 
 
 @router.post("/diagnose")
 async def ai_diagnose(req: DiagnoseRequest):
     """Diagnose a git error and suggest fixes."""
-    result = await diagnose_error(req.error_output, req.context)
-    return result
+    try:
+        result = await diagnose_error(req.error_output, req.context)
+        return result
+    except ValueError as exc:
+        return JSONResponse(status_code=400, content={"detail": str(exc)})
