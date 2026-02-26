@@ -27,9 +27,9 @@ class Settings(BaseSettings):
 
     # AI
     GEMINI_API_KEY: str = ""
-    GEMINI_MODEL: str = "gemini-2.5-pro"
+    GEMINI_MODEL: str = "gemini-2.5-flash"
     AI_REQUEST_TIMEOUT: int = 30
-
+ 
     # Git
     DEFAULT_REPO_PATH: str = "."
     MAX_DIFF_BYTES: int = 50_000  # Limit diff sent to AI to prevent token abuse

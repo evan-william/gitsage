@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/gitsage-banner.jpg" alt="GitSage" width="640"/>
+<img src="assets/gitsage-banner.png" alt="GitSage" width="640"/>
 
 # GitSage
 
@@ -11,9 +11,14 @@
 [![License](https://img.shields.io/badge/License-MIT-22c55e?style=flat-square)](LICENSE)
 [![Tests](https://img.shields.io/badge/Tests-pytest-yellow?style=flat-square&logo=pytest)](tests/)
 
+[**Quick Start**](#quick-start) · [**Configuration**](#configuration) · [**Security**](#security) · [**Report Bug**](https://github.com/evan-william/gitsage/issues)
+
 </div>
 
 ---
+
+> [!WARNING]
+> This project is currently **work in progress**. The AI Commit Writer feature contains known bugs and may not work as expected. Use with caution.
 
 ## What is GitSage?
 
@@ -39,7 +44,7 @@ Everything runs on your machine. No data leaves your environment except the call
 | AI | Diagnose Git errors with step-by-step remediation |
 | Branches | List, create, switch, and delete local branches |
 | Remotes | Fetch, pull, and push to configured remotes |
-| Security | All subprocess calls use list arguments, no shell injection surface |
+| Security | All subprocess calls use list arguments — no shell injection surface |
 
 ---
 
@@ -47,22 +52,31 @@ Everything runs on your machine. No data leaves your environment except the call
 
 **Requirements:** Python 3.11+, Git
 
+### Option 1: Using Setup Script
 ```bash
 # Clone
-git clone https://github.com/yourname/gitsage.git
+git clone [https://github.com/yourname/gitsage.git](https://github.com/yourname/gitsage.git)
 cd gitsage
 
 # Install and start
 ./scripts/setup.sh
+
 ```
 
-Open [http://localhost:8000](http://localhost:8000) in your browser.
+### Option 2: Manual Run
 
-For development mode (auto-reload + API docs at `/api/docs`):
+If you prefer running the server directly via Uvicorn:
 
 ```bash
-./scripts/setup.sh --dev
+# Install dependencies
+pip install -r requirements.txt
+
+# Run the application
+uvicorn main:app --host 127.0.0.1 --port 8000
+
 ```
+
+Open [http://localhost:8000](https://www.google.com/search?q=http://localhost:8000) in your browser.
 
 ---
 
@@ -72,30 +86,44 @@ Copy `.env.example` to `.env` and edit:
 
 ```bash
 cp .env.example .env
+
 ```
 
 | Variable | Default | Description |
-|----------|---------|-------------|
-| `GEMINI_API_KEY` | _(empty)_ | Google Gemini API key. Get one at [aistudio.google.com](https://aistudio.google.com/). AI features are disabled when not set. |
+| --- | --- | --- |
+| `GEMINI_API_KEY` | *(empty)* | Google Gemini API key. Get one at [aistudio.google.com](https://aistudio.google.com/). AI features are disabled when not set. |
 | `GEMINI_MODEL` | `gemini-1.5-flash` | Gemini model name |
 | `DEFAULT_REPO_PATH` | `.` | Absolute path of the repository to manage |
 | `PORT` | `8000` | Server port |
 | `DEBUG` | `false` | Enable auto-reload and API docs |
 | `MAX_DIFF_BYTES` | `50000` | Max bytes of diff forwarded to AI |
 
+### Checking Available Models
+
+To see which Gemini models are available for your API Key, run the included utility script:
+
+```bash
+python list_model_check.py
+
+```
+
+This will display a list of valid model IDs you can use in your `.env` file.
+
 ---
 
 ## Running Tests
 
 ```bash
-./scripts/run_tests.sh          # full suite with coverage report
-./scripts/run_tests.sh --fast   # fast run, no coverage
+./scripts/run_tests.sh              # full suite with coverage report
+./scripts/run_tests.sh --fast       # fast run, no coverage
+
 ```
 
 Or directly:
 
 ```bash
 pytest tests/ -v
+
 ```
 
 ---
@@ -105,6 +133,7 @@ pytest tests/ -v
 ```
 gitsage/
 ├── main.py                        # Application entry point
+├── list_model_check.py            # Utility to check available Gemini models
 ├── .env.example                   # Configuration template
 ├── requirements.txt
 ├── pyproject.toml                 # Pytest and coverage config
@@ -131,7 +160,8 @@ gitsage/
 │   ├── templates/index.html       # Main page (HTMX + Tailwind)
 │   └── static/
 │       ├── css/app.css
-│       └── js/app.js
+│       ├── js/app.js
+│       └── favicon.svg
 │
 ├── tests/
 │   ├── conftest.py                # Shared fixtures (temp git repo)
@@ -143,6 +173,7 @@ gitsage/
 └── scripts/
     ├── setup.sh                   # Install and run
     └── run_tests.sh               # Test runner
+
 ```
 
 ---
@@ -151,20 +182,20 @@ gitsage/
 
 GitSage is designed for local use only. Key decisions:
 
-- `TrustedHostMiddleware` restricts access to `localhost` / `127.0.0.1` only.
-- Git commands are executed with a list of arguments (`shell=False`) — no shell injection is possible.
-- The repository path is validated and canonicalised on every request; `..` traversal is rejected.
-- Credential prompts are disabled via `GIT_TERMINAL_PROMPT=0`. Git credentials come from your system's credential store, never from GitSage.
-- AI-suggested auto-fix commands are validated against a whitelist of known-safe patterns before being presented to the user.
-- Commit messages are sanitised to strip control characters before being passed to git.
-- The Gemini API key is read from the environment and never logged or surfaced in API responses.
+* `TrustedHostMiddleware` restricts access to `localhost` / `127.0.0.1` only.
+* Git commands are executed with a list of arguments (`shell=False`) — no shell injection is possible.
+* The repository path is validated and canonicalised on every request; `..` traversal is rejected.
+* Credential prompts are disabled via `GIT_TERMINAL_PROMPT=0`. Git credentials come from your system's credential store, never from GitSage.
+* AI-suggested auto-fix commands are validated against a whitelist of known-safe patterns before being presented to the user.
+* Commit messages are sanitised to strip control characters before being passed to git.
+* The Gemini API key is read from the environment and never logged or surfaced in API responses.
 
 ---
 
 ## Stack
 
 | Layer | Technology |
-|-------|-----------|
+| --- | --- |
 | Backend | FastAPI, Uvicorn |
 | AI | Google Gemini API (via httpx) |
 | Frontend | HTMX, Tailwind CSS |
@@ -184,4 +215,4 @@ GitSage is designed for local use only. Key decisions:
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT — see [LICENSE](https://www.google.com/search?q=LICENSE).
